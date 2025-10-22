@@ -1,0 +1,15 @@
+✅ Статья 2
+URL: https://pubmed.ncbi.nlm.nih.gov/36096982/
+Название: Could aging evolve as a pathogen control strategy?
+Год: 2022
+
+[Тот же промпт-шаблон]
+
+--- BEGIN ARTICLE TEXT ---
+This paper proposes that aging may have evolved as a defense against pathogens. By limiting the lifespan of individuals, aging reduces the time window for pathogen transmission, thereby protecting kin groups. The theory suggests that senescence acts as a form of "altruistic suicide" to limit epidemic spread. It explains: 
+
+Why long-lived species (e.g., birds, naked mole-rats) often have enhanced pathogen resistance.
+Why large animals (with lower population density) can afford longer lifespans.
+Why calorie restriction, which reduces metabolic activity and pathogen replication, extends lifespan.
+The paper explicitly links pathogen pressure to interspecies differences in longevity and suggests that immune robustness is a key factor in exceptional longevity.
+--- END ARTICLE TEXT ---
