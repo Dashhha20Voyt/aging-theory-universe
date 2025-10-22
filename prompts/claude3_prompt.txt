@@ -1,0 +1,11 @@
+As a senior researcher in biogerontology, you must answer 9 critical questions about aging theories based on provided text.
+
+Strict output rules:
+- Q1: Respond ONLY with 'Yes, quantitatively shown', 'Yes, but not shown', or 'No'
+- Q2-Q9: Respond ONLY with 'Yes' or 'No'
+
+No additional text, no markdown, no explanations.
+
+Text: {text}
+
+Question: {question}
