@@ -1,0 +1,46 @@
+✅ Статья 1
+URL: https://pmc.ncbi.nlm.nih.gov/articles/PMC7612201/
+Название: The hyperfunction theory: An emerging paradigm for the biology of aging
+Год: 2022
+
+You are an expert in biogerontology and aging biology.
+
+Below is the scientific text of a paper about aging.
+
+Carefully read it and answer each of the following 9 questions with ONLY "Yes" or "No" — do not add explanations, disclaimers, or extra text.
+
+Questions:
+Q1: Does the paper suggest an aging biomarker (i.e. a measurable entity reflecting the pace of aging or organism health state, associated with mortality or age-related conditions)?
+Q2: Does the paper suggest a molecular mechanism of aging?
+Q3: Does the paper suggest a longevity intervention to test?
+Q4: Does the paper claim that aging cannot be reversed?
+Q5: Does the paper suggest a biomarker that explains differences in maximum lifespan between species?
+Q6: Does the paper explain why the naked mole rat can live 40+ years despite its small size?
+Q7: Does the paper explain why birds live much longer than mammals on average?
+Q8: Does the paper explain why large animals live longer than small ones?
+Q9: Does the paper explain why calorie restriction increases the lifespan of vertebrates?
+
+Rules:
+
+Base answers strictly on the provided text.
+If the paper mentions, proposes, or implies the concept — answer "Yes".
+If the topic is not addressed at all, answer "No".
+Output only the answers in this exact format:
+Q1: Yes
+Q2: No
+Q3: Yes
+...
+Q9: No
+
+--- BEGIN ARTICLE TEXT ---
+The process of senescence (aging) is predominantly determined by the action of wild-type genes. For most organisms, this does not reflect any adaptive function that senescence serves, but rather evolutionary effects of declining selection against genes with deleterious effects later in life. To understand aging requires an account of how evolutionary mechanisms give rise to pathogenic gene action and late-life disease, that integrates evolutionary (ultimate) and mechanistic (proximate) causes into a single explanation. A well-supported evolutionary explanation by G.C. Williams argues that senescence can evolve due to pleiotropic effects of alleles with antagonistic effects on fitness and late-life health (antagonistic pleiotropy, AP). What has remained unclear is how gene action gives rise to late-life disease pathophysiology. One ultimate-proximate account is T.B.L. Kirkwood’s disposable soma theory. Based on the hypothesis that stochastic molecular damage causes senescence, this reasons that aging is coupled to reproductive fitness due to preferential investment of resources into reproduction, rather than somatic maintenance. An alternative and more recent ultimate-proximate theory argues that aging is largely caused by programmatic, developmental-type mechanisms. Here ideas about AP and programmatic aging are reviewed, particularly those of M.V. Blagosklonny (the hyperfunction theory) and J.P. de Magalhães (the developmental theory), and their capacity to make sense of diverse experimental findings is assessed.
+
+Key points: 
+
+Aging is caused by "quasi-programs" — futile continuation of developmental programs (e.g., mTOR-driven hyperfunction).
+Examples: presbyopia (lens overgrowth), benign prostatic hyperplasia, babirusa tusks piercing skull.
+Rapamycin (mTOR inhibitor) is proposed as a longevity intervention.
+Calorie restriction works by inhibiting mTOR, not by resource reallocation.
+Large animals live longer because they develop slower (selection for slower aging → slower development), whereas within species, larger size may correlate with faster aging.
+No mention of naked mole-rats, birds, or species-specific biomarkers.
+--- END ARTICLE TEXT ---
