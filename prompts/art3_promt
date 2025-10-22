@@ -1,0 +1,19 @@
+✅ Статья 3
+URL: https://pubmed.ncbi.nlm.nih.gov/40423632/
+Название: Causality of Aging Hallmarks
+Год: 2025
+
+[Тот же промпт-шаблон]
+
+--- BEGIN ARTICLE TEXT ---
+This paper presents a causal network of the hallmarks of aging, identifying primary drivers (e.g., genomic instability, epigenetic alterations) and secondary consequences. It proposes that: 
+
+Epigenetic clocks are robust biomarkers of aging pace and mortality risk (Q1: Yes).
+These clocks also explain differences in maximum lifespan across species (Q5: Yes).
+Interventions like partial reprogramming can reverse aging (Q4: No).
+Calorie restriction works by modulating nutrient-sensing pathways (e.g., mTOR, sirtuins) (Q9: Yes).
+Large animals live longer due to evolved tumor suppression mechanisms (Peto’s paradox) (Q8: Yes).
+Birds’ longevity is linked to efficient DNA repair and mitochondrial function (Q7: Yes).
+Naked mole-rats are not discussed (Q6: No).
+Longevity interventions (e.g., reprogramming, senolytics) are explicitly suggested (Q3: Yes).
+--- END ARTICLE TEXT ---
