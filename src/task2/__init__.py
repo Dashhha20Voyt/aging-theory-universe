@@ -1,4 +1,4 @@
-# src/task2/extract_data.py
+# src/task2/extract_data_ultra_fast.py
 
 import openai
 import pandas as pd
@@ -10,12 +10,12 @@ import random
 import os
 
 # --- CONFIG ---
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "your_openai_key_here")  # Load from .env
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "your_openai_key_here")
 openai.api_key = OPENAI_API_KEY
 
 # --- QUESTIONS ---
 questions = [
-    "Does it suggest an aging biomarker (measurable entity reflecting aging pace or health state, associated with mortality or age-related conditions)?",
+    "Does it suggest an aging biomarker?",
     "Does it suggest a molecular mechanism of aging?",
     "Does it suggest a longevity intervention to test?",
     "Does it claim that aging cannot be reversed?",
@@ -26,118 +26,99 @@ questions = [
     "Does it explain why calorie restriction increases the lifespan of vertebrates?"
 ]
 
-# --- PROMPT LOADER ---
-def load_prompt(llm_name):
-    """Load prompt template for specific LLM from prompts/ folder"""
-    prompt_path = f"prompts/{llm_name}_prompt.txt"
-    try:
-        with open(prompt_path, 'r', encoding='utf-8') as f:
-            return f.read().strip()
-    except FileNotFoundError:
-        return f"# Prompt for {llm_name} not found\nYou are an expert in aging biology. Answer ONLY with: 'Yes, quantitatively shown', 'Yes, but not shown', 'No' for Q1. For Q2-Q9: only 'Yes' or 'No'."
+# --- PROMPT TEMPLATE ---
+def create_batch_prompt(abstracts):
+    """Create one prompt for 10 papers, 3 questions each"""
+    prompts = []
+    for i, abstract in enumerate(abstracts, 1):
+        prompts.append(f"Paper {i}:\nAbstract: {abstract}\nQ1: {questions[0]}\nQ2: {questions[1]}\nQ3: {questions[2]}")
+    
+    return "\n\n".join(prompts) + "\n\nAnswer format:\nPaper 1: Q1: Yes/No/Yes, quantitatively shown; Q2: Yes/No; Q3: Yes/No\nPaper 2: ..."
 
-# --- LLM EVALUATOR ---
-class LLMEvaluator:
-    """Evaluate multiple LLMs on a golden set and select the best one"""
-    
-    def __init__(self, golden_set_path="data/processed/golden_set.csv"):
-        self.golden_set = pd.read_csv(golden_set_path) if os.path.exists(golden_set_path) else None
-        self.best_llm = None
-        self.scores = {}
-    
-    async def evaluate_llms(self, llm_list=["gpt4o", "claude3", "gemini15", "mistral7b"]):
-        """Evaluate each LLM on golden set and return best performer"""
-        if self.golden_set is None:
-            print("⚠️ Golden set not found. Skipping evaluation.")
-            return "gpt4o"  # Default
-        
-        for llm in llm_list:
-            score = await self._evaluate_single_llm(llm)
-            self.scores[llm] = score
-            print(f"✅ {llm}: Accuracy = {score:.2%}")
-        
-        self.best_llm = max(self.scores, key=self.scores.get)
-        print(f"🏆 Best LLM: {self.best_llm} (Accuracy = {self.scores[self.best_llm]:.2%})")
-        return self.best_llm
-    
-    async def _evaluate_single_llm(self, llm_name):
-        """Evaluate one LLM on golden set"""
-        correct = 0
-        total = len(self.golden_set)
-        
-        for _, row in self.golden_set.iterrows():
-            text = row.get('abstract') or row.get('full_text') or ""
-            for i, q in enumerate(questions, 1):
-                answer = await self._ask_llm(llm_name, q, text)
-                expected = row[f'q{i}']
-                if answer.strip().lower() == expected.strip().lower():
-                    correct += 1
-        
-        return correct / total if total > 0 else 0
-    
-    async def _ask_llm(self, llm_name, question, text):
-        """Ask LLM with specific prompt"""
-        prompt = load_prompt(llm_name)
-        full_prompt = f"{prompt}\n\nText: {text}\n\nQuestion: {question}"
-        
-        try:
-            response = openai.chat.completions.create(
-                model="gpt-4o" if llm_name == "gpt4o" else "gpt-4o",  # Adjust model name as needed
-                messages=[{"role": "user", "content": full_prompt}],
-                max_tokens=50,
-                temperature=0.0
-            )
-            return response.choices[0].message.content.strip()
-        except Exception as e:
-            return f"Error: {str(e)}"
+def parse_batch_response(response, batch_size):
+    """Parse response into answers for each paper"""
+    lines = response.split("\n")
+    results = []
+    for i in range(batch_size):
+        line = lines[i] if i < len(lines) else ""
+        parts = line.split("; ")
+        answers = {}
+        for part in parts:
+            if ":" in part:
+                key, val = part.split(":", 1)
+                answers[key.strip()] = val.strip()
+        results.append(answers)
+    return results
 
-# --- ASYNC PROCESSING ---
-
-async def process_paper(index, row, questions, session, llm_name):
-    """Process single paper with selected LLM"""
-    answers = {}
-    text = row.get('abstract') or row.get('full_text') or ""
-    
-    for i, q in enumerate(questions, 1):
-        ans = await ask_llm_with_prompt(llm_name, q, text)
-        answers[f'q{i}'] = ans
-    return index, answers
-
-async def ask_llm_with_prompt(llm_name, question, text):
-    """Ask LLM using its specific prompt template"""
-    prompt = load_prompt(llm_name)
-    full_prompt = f"{prompt}\n\nText: {text}\n\nQuestion: {question}"
+# --- ASYNC BATCH PROCESSING ---
+async def process_batch(session, batch):
+    """Process 10 papers at once with ChatGPT"""
+    abstracts = [paper.get('abstract') or (paper.get('full_text') or "")[:300] for paper in batch]
+    prompt = create_batch_prompt(abstracts)
     
     try:
-        response = openai.chat.completions.create(
-            model="gpt-4o" if llm_name == "gpt4o" else "gpt-4o",  # Adjust model name as needed
-            messages=[{"role": "user", "content": full_prompt}],
-            max_tokens=50,
-            temperature=0.0
-        )
-        return response.choices[0].message.content.strip()
+        async with session.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {OPENAI_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "gpt-4o-mini",  # ✅ Быстрее и дешевле
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": 300,
+                "temperature": 0.0
+            }
+        ) as response:
+            if response.status == 429:
+                delay = 2 + random.uniform(0, 1)
+                print(f"⏳ ChatGPT 429 — waiting {delay:.1f} sec...")
+                await asyncio.sleep(delay)
+                return None
+            
+            data = await response.json()
+            content = data['choices'][0]['message']['content']
+            return parse_batch_response(content, len(batch))
+    
     except Exception as e:
-        return f"Error: {str(e)}"
+        print(f"❌ ChatGPT error: {e}")
+        return None
 
+# --- MAIN FUNCTION ---
 async def main():
     df = pd.read_csv('data/processed/collected_papers.csv')
+    df['theory_id'] = range(1, len(df) + 1)
     
-    # Evaluate LLMs and select best one
-    evaluator = LLMEvaluator()
-    best_llm = await evaluator.evaluate_llms()
-    print(f"✅ Selected best LLM: {best_llm}")
+    # Split into batches of 10
+    batches = [df[i:i+10].to_dict('records') for i in range(0, len(df), 10)]
     
-    # Process all papers with best LLM
-    async with aiohttp.ClientSession() as session:
-        tasks = []
-        for idx, row in df.iterrows():
-            tasks.append(process_paper(idx, row, questions, session, best_llm))
-        
-        results = await tqdm_asyncio.gather(*tasks, desc=f"🤖 Analyzing papers with {best_llm}", unit="paper")
-        
-        for idx, answers in results:
-            for k, v in answers.items():
-                df.at[idx, k] = v
+    # Split batches into 20 groups for parallel processing
+    group_size = len(batches) // 20 + 1
+    groups = [batches[i:i+group_size] for i in range(0, len(batches), group_size)]
+    
+    async def process_group(group):
+        async with aiohttp.ClientSession() as session:
+            tasks = [process_batch(session, batch) for batch in group]
+            results = await tqdm_asyncio.gather(*tasks, desc="🤖 Group", unit="batch")
+            return results
+    
+    # Process 20 groups in parallel
+    tasks = [process_group(group) for group in groups]
+    all_results = await tqdm_asyncio.gather(*tasks, desc="🚀 All Groups", unit="group")
+    
+    # Combine results
+    final_results = []
+    for group_results in all_results:
+        final_results.extend(group_results)
+    
+    # Apply results to DataFrame
+    for i, batch_result in enumerate(final_results):
+        if batch_result is not None:
+            start_idx = i * 10
+            for j, answers in enumerate(batch_result):
+                idx = start_idx + j
+                for k, v in answers.items():
+                    df.at[idx, k] = v
     
     df.to_csv('data/processed/extracted_answers.csv', index=False)
     print("✅ Answers saved to data/processed/extracted_answers.csv")
