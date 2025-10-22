@@ -1,8 +1,5 @@
 # 🏗️ Architecture Overview
 
-## 🌐 Data Flow
-# 🏗️ Architecture Overview
-
 ## 🌐 Data Flow Diagram
 
 ```mermaid
