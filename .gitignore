@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.idea/
+.vscode/
+*.swp
+*.swo
+*.log
+*.tmp
+*.lock
+
+# Data
+/data/raw/*
+/data/processed/*
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Streamlit
+/streamlit/static/
+
+# Environment
+.env
+.env.local
+.env.dev
+.env.prod
+
+# IDE
+.DS_Store
+*.iml
+*.ipr
+*.iws
+
+# OS
+Thumbs.db
+Desktop.ini
