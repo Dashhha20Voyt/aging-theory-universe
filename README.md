@@ -18,7 +18,7 @@ AI-powered system to collect, analyze, and visualize theories of aging across al
 
 ### Option 1: Run in Google Colab (Recommended)
 
-[![Open In Colab]([https://colab.research.google.com/assets/colab-badge.svg](https://colab.research.google.com/github/yourusername/aging-theory-universe/blob/main/notebooks/demo_colab.ipynb](https://colab.research.google.com/drive/1Ufr0ZANsY8y7sLzp-DC5UxVxVfslXkC2?usp=sharing)))]
+https://colab.research.google.com/github/yourusername/aging-theory-universe/blob/main/notebooks/demo_colab.ipynb](https://colab.research.google.com/drive/1Ufr0ZANsY8y7sLzp-DC5UxVxVfslXkC2?usp=sharing)
 
 ### Option 2: Local Setup
 
