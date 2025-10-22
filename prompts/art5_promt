@@ -1,0 +1,21 @@
+✅ Статья 5
+URL: https://pubmed.ncbi.nlm.nih.gov/38636560/
+Название: Aging as a loss of morphostatic information: A developmental bioelectricity perspective
+Год: 2024
+
+[Тот же промпт-шаблон]
+
+--- BEGIN ARTICLE TEXT ---
+This paper proposes that aging stems from the breakdown of bioelectric patterns that maintain tissue morphology ("morphostatic information"). It suggests: 
+
+Bioelectric signatures (e.g., transmembrane voltage gradients) serve as aging biomarkers (Q1: Yes).
+Ion channel dysregulation is a molecular mechanism (Q2: Yes).
+Reprogramming bioelectric networks (e.g., with ion channel drugs) is a longevity intervention (Q3: Yes).
+Aging is reversible by restoring bioelectric patterns (Q4: No).
+However, the paper does not address:
+Species lifespan differences (Q5: No),
+Naked mole-rats (Q6: No),
+Birds (Q7: No),
+Body size effects (Q8: No),
+Calorie restriction (Q9: No).
+--- END ARTICLE TEXT ---
